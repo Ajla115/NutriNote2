@@ -51,7 +51,8 @@ class SplashScreenActivity : ComponentActivity() {
 @Composable
 fun SplashScreen(modifier: Modifier){
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .background(color = Color(0xFF99EDC3)),
         contentAlignment = Alignment.Center
     ) {
         Column(modifier = Modifier.padding(16.dp),
@@ -71,7 +72,7 @@ fun SplashScreen(modifier: Modifier){
 
 @Composable
 private fun HeaderText() {
-    Text(text = "NutriNote", fontWeight = FontWeight.Bold, fontSize = 64.sp, color = Color(0xFF1B7F79), style = MaterialTheme.typography.h1)
+    Text(text = "NutriNote", fontWeight = FontWeight.Bold, fontSize = 64.sp, color = Color.DarkGray, style = MaterialTheme.typography.h1)
 }
 
 @Composable
@@ -82,11 +83,11 @@ private fun ButtonRegisterSplash() {
         contentPadding = PaddingValues(vertical = 16.dp, horizontal = 1.dp),
         shape = Shapes.large,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(0xFF99EDC3)
-        )
+            backgroundColor = Color(0xFF1B7F79))
+
 
     ) {
-        Text("Register", fontSize = 15.sp)
+        Text("Register", color = Color.White, fontSize = 15.sp)
     }
 }
 
@@ -98,9 +99,9 @@ private fun ButtonLoginSplash() {
         contentPadding = PaddingValues(vertical = 16.dp, horizontal = 1.dp),
         shape = Shapes.large,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color(0xFF99EDC3)
+            backgroundColor = Color(0xFF1B7F79)
         )) {
-        Text("Login", fontSize = 15.sp)
+        Text("Login", color = Color.White, fontSize = 15.sp)
     }
 }
 
@@ -162,12 +163,12 @@ fun NutriNoteApp(modifier: Modifier = Modifier) {
 }
 */
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     SplashScreen(modifier = Modifier)
 }
-
+*/
 
 
 
