@@ -90,15 +90,15 @@ private fun UsernameTextField() {
 
     OutlinedTextField(
         value = username,
+        onValueChange = { username = it },
+        label = { Text(text = "Username") },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true, //dodano
         keyboardOptions = KeyboardOptions.Default.copy( //dodano
             keyboardType = KeyboardType.Text, //dodano
             imeAction = ImeAction.Next //dodano
         ),
-        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus((FocusDirection.Down)) }), //dodano
-        singleLine = true, //dodano
-        onValueChange = { username = it },
-        label = { Text(text = "Username") },
-        modifier = Modifier.fillMaxWidth()
+        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus((FocusDirection.Down)) }) //dodano
         //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
     )
 }
@@ -110,15 +110,15 @@ private fun EmailTextField() {
 
     OutlinedTextField(
         value = email,
+        onValueChange = { email = it },
+        label = { Text(text = "Email") },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true, //dodano
         keyboardOptions = KeyboardOptions.Default.copy( //dodano
             keyboardType = KeyboardType.Email, //dodano
             imeAction = ImeAction.Next //da prebaci na sljedecu liniju //dodano
         ),
-        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus((FocusDirection.Down)) }), //dodano
-        singleLine = true, //dodano
-        onValueChange = { email = it },
-        label = { Text(text = "Email") },
-        modifier = Modifier.fillMaxWidth(),
+        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus((FocusDirection.Down)) }) //dodano
         //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
     )
 }
@@ -130,16 +130,16 @@ private fun PasswordTextField() {
 
     OutlinedTextField(
         value = password,
+        onValueChange = { password = it },
+        label = { Text(text = "Password") },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy( //dodano
             keyboardType = KeyboardType.Password, //dodano
             imeAction = ImeAction.Done  //dodano
         ),
         keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }), //dodano
-        singleLine = true,
-        visualTransformation = PasswordVisualTransformation(), //dodano
-        onValueChange = { password = it },
-        label = { Text(text = "Password") },
-        modifier = Modifier.fillMaxWidth()
+        visualTransformation = PasswordVisualTransformation() //dodano
         //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
     )
 }

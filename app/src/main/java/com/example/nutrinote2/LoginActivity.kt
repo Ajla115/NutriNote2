@@ -85,15 +85,16 @@ private fun EmailTextField() {
 
     OutlinedTextField(
         value = email,
+        onValueChange = { email = it },
+        label = { Text(text = "Email:") },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy( //dodano
             keyboardType = KeyboardType.Email, //dodano
             imeAction = ImeAction.Next //da prebaci na sljedecu liniju //dodano
         ),
-        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus((FocusDirection.Down)) }), //dodano
-        singleLine = true, //dodano
-        onValueChange = { email = it },
-        label = { Text(text = "Email:") },
-        modifier = Modifier.fillMaxWidth()
+        keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus((FocusDirection.Down)) }) //dodano
+         //dodano
         //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
     )
 }
@@ -105,16 +106,17 @@ private fun PasswordTextField() {
 
     OutlinedTextField(
         value = password,
+        onValueChange = { password = it },
+        label = { Text(text = "Password:") },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
         keyboardOptions = KeyboardOptions.Default.copy( //dodano
             keyboardType = KeyboardType.Password, //dodano
             imeAction = ImeAction.Done  //dodano
         ),
         keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }), //dodano
-        singleLine = true,
-        onValueChange = { password = it },
-        visualTransformation = PasswordVisualTransformation(), //dodano
-        label = { Text(text = "Password:") },
-        modifier = Modifier.fillMaxWidth()
+        visualTransformation = PasswordVisualTransformation()//dodano
+        //ja sam sklanjala zareze sa zadnjeg elementa u redoslijedu, iako nije bio problem ako je on bio tu, ali sta znam, za svaki slucaj
         //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
     )
 }
