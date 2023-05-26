@@ -2,4 +2,7 @@
     <string name="app_name">NutriNote2</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
+    <string name="start">Splash_Screen</string>
+    <string name="home">Calorie_Counter</string>
+    <string name="water">Water_reminder</string>
 </resources>

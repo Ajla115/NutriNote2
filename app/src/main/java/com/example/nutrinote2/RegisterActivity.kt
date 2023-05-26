@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.sp
 
 
 
-class RegisterActivity : ComponentActivity() {
+/*class RegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -40,7 +40,7 @@ class RegisterActivity : ComponentActivity() {
             }
         }
     }
-}
+}*/
 
 
 @Composable
@@ -185,7 +185,7 @@ private fun ButtonToLogin() {
     }
 }
 
-/*@Preview(showBackground = true)
+/*Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     RegisterScreen()

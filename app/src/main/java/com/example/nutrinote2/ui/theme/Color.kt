@@ -1,4 +1,3 @@
-package com.example.nutrinote2.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

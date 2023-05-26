@@ -63,9 +63,9 @@ fun LoginScreen(mContext: Context) {
             /*Spacer(modifier = Modifier.height(16.dp))
             ButtonFBLogin()*/
             Spacer(modifier = Modifier.height(128.dp))
-            ButtonToRegister(onClick = {
+            /*ButtonToRegister(onClick = {
                 mContext.startActivity(Intent(mContext, RegisterActivity::class.java))
-            })
+            })*/
         }
     }
 }
@@ -169,5 +169,4 @@ private fun ButtonToRegister(onClick: () -> Unit) {
 fun DefaultPreview() {
     val context = LocalContext.current // Retrieve the context using LocalContext
     LoginScreen(context)
-}
-*/
+}*/
