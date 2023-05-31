@@ -13,10 +13,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.nutrinote2.NutriNoteScreen
 import com.example.nutrinote2.databasedata.User
 
 @Composable
-fun ProfileScreen( onLogoutButtonClicked: () -> Unit) {
+fun ProfileScreen() {
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -37,37 +39,28 @@ fun ProfileScreen( onLogoutButtonClicked: () -> Unit) {
                 )
                 // Add your history display here
 
-                Spacer(modifier = Modifier.height(250.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Box(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = "Click here to logout",
-                            style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium),
-                            modifier = Modifier.padding(16.dp)
-                        )
-                    }
-                    Button(
-                        onClick = { onLogoutButtonClicked() },
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(text = "Logout")
-                    }
-                }
-
-
             }
-            Spacer(modifier = Modifier.height(24.dp))
-
         }
     }
 }
 
-@Preview(showBackground = true)
+
+
+
+
+
+
+
+
+
+
+
+/*@Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
 
     ProfileScreen(onLogoutButtonClicked = {})
-}
+}*/
 
 
 

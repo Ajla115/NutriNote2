@@ -85,10 +85,9 @@ fun NutriNoteApp() {
             composable(route = NutriNoteScreen.Home.name){
                 MainScreen()
             }
-            composable(route = NutriNoteScreen.Profile.name){
-                    ProfileScreen(onLogoutButtonClicked = {navController.navigate(NutriNoteScreen.Start.name) })
+
+
             }
-        }
 
         }
     }
@@ -146,7 +145,7 @@ fun Navigation(navController: NavHostController) {
             RecipesScreen()
         }
         composable(NavigationItem.Profile.route) {
-            ProfileScreen(onLogoutButtonClicked = { navController.navigate(NutriNoteScreen.Start.name) } )
+                ProfileScreen()
         }
     }
 }
