@@ -3,6 +3,22 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="start">Splash_Screen</string>
-    <string name="home">Calorie_Counter</string>
     <string name="water">Water_reminder</string>
+    <string name="title_home">Calorie Counter</string>
+    <string name="title_water">Water Tracker</string>
+    <string name="title_recipes">Healthy Recipes</string>
+    <string name="title_profile">Your Profile</string>
+    <string name="profile">Profile</string>
+    <string name="recipe1">Beef and Broccoli</string>
+    <string name="recipe2">Honey Walnut Shrimps</string>
+    <string name="recipe3">Black Bean Burgers</string>
+    <string name="recipe4">Chicken Tetrazzini</string>
+    <string name="recipe5">Vegan Lasagne</string>
+    <string name="recipe6">Parmesan Risotto</string>
+    <string name="recipe7">Garlic Butter Meatballs</string>
+    <string name="recipe8">Sweet Potatoes</string>
+    <string name="recipe9">Tuscan Chicken Pasta</string>
+    <string name="recipe10">Crab-Stuffed Avocado</string>
+    <string name="info_link">Click here to read more</string>
+
 </resources>

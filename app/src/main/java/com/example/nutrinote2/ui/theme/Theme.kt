@@ -7,10 +7,11 @@ import Purple500
 import Purple700
 import Teal200
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MaterialTheme.colorScheme
 
 
 private val DarkColorPalette = darkColors(
@@ -43,9 +44,8 @@ fun NutriNote2Theme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compos
     }
 
     MaterialTheme(
-        colors = colors,
+        colorScheme = colorScheme,
         typography = Typography,
-        shapes = Shapes,
         content = content
     )
 }
