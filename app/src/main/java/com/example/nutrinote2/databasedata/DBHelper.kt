@@ -13,8 +13,54 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
                 + USERNAME_COL + " TEXT,"
                 + PASSWORD_COL + " TEXT,"
                 + EMAIL_COL + " TEXT)")
+
+        val createFoodsTableQuery = ("CREATE TABLE " + FOODS_TABLE_NAME + " ("
+                + FOODS_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + FOODS_NAME_COL + " TEXT,"
+                + FOODS_CATEGORY_COL + " TEXT,"
+                + FOODS_CARBS_COL + " INTEGER,"
+                + FOODS_PROTEIN_COL + " INTEGER,"
+                + FOODS_FAT_COL + " INTEGER)")
+
         db.execSQL(createTableQuery)
+        db.execSQL(createFoodsTableQuery)
+
+        insertFoods()
     }
+
+    fun insertFoods() {
+        val foods = listOf(
+                Food(1, "Scrambled Eggs", "Breakfast", 1.2f, 13.1f, 9.3f),
+                Food(2, "Oatmeal", "Breakfast", 54.0f, 6.1f, 1.9f),
+                Food(3, "Greek Yogurt", "Breakfast", 3.6f, 10.0f, 0.4f),
+                Food(4, "Grilled Chicken Salad", "Lunch", 6.3f, 41.0f, 7.2f),
+                Food(5, "Quinoa Bowl", "Lunch", 30.0f, 12.0f, 4.0f),
+                Food(6, "Vegetable Wrap", "Lunch", 38.0f, 7.6f, 1.2f),
+                Food(7, "Salmon with Roasted Vegetables", "Dinner", 2.1f, 22.5f, 13.9f),
+                Food(8, "Brown Rice Stir-Fry", "Dinner", 45.0f, 6.0f, 2.0f),
+                Food(9, "Grilled Steak with Sweet Potato", "Dinner", 3.1f, 26.0f, 8.6f),
+                Food(10, "Almonds", "Snack", 6.0f, 21.0f, 49.0f),
+                Food(11, "Apple Slices with Peanut Butter", "Snack", 11.0f, 3.0f, 16.0f),
+                Food(12, "Greek Yogurt with Berries", "Snack", 5.0f, 15.0f, 0.5f)
+        )
+
+        val db = writableDatabase
+
+        foods.forEach { food ->
+            val values = ContentValues().apply {
+                put(FOODS_NAME_COL, food.name)
+                put(FOODS_CATEGORY_COL, food.category)
+                put(FOODS_CARBS_COL, food.carbs)
+                put(FOODS_PROTEIN_COL, food.protein)
+                put(FOODS_FAT_COL, food.fat)
+            }
+
+            db.insert(FOODS_TABLE_NAME, null, values)
+        }
+
+        db.close()
+    }
+
 
     fun addUser(username: String?, password: String?, email: String?) {
         val db = this.writableDatabase
@@ -69,6 +115,9 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
+
+        db.execSQL("DROP TABLE IF EXISTS $FOODS_TABLE_NAME")
+
         onCreate(db)
     }
 
@@ -80,5 +129,13 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         private const val USERNAME_COL = "username"
         private const val PASSWORD_COL = "password"
         private const val EMAIL_COL = "email"
+
+        private const val FOODS_TABLE_NAME = "foods"
+        private const val FOODS_ID_COL = "food_id"
+        private const val FOODS_NAME_COL = "food_name"
+        private const val FOODS_CATEGORY_COL = "category"
+        private const val FOODS_CARBS_COL = "carbs"
+        private const val FOODS_PROTEIN_COL = "protein"
+        private const val FOODS_FAT_COL = "fat"
     }
 }
