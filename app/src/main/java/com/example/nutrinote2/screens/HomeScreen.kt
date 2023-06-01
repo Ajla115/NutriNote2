@@ -3,6 +3,7 @@ package com.example.nutrinote2.screens
 import android.content.Context
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -269,19 +270,31 @@ fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
                     },
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = mealButtonColor, contentColor = Color(0xFF131712)),
                 ) {
-                    Row {
-                        androidx.compose.material3.Text(
-                            text = food.name,
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.align(Alignment.CenterVertically)
-                        )
-                        Column(modifier = Modifier.padding(start = 50.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            androidx.compose.material3.Text(
+                                text = food.name,
+                                style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.padding(end = 8.dp)
+                            )
+                        }
+                        Column(
+                            modifier = Modifier.padding(start = 16.dp),
+                            verticalArrangement = Arrangement.Center
+                        ) {
                             androidx.compose.material3.Text(text = "Protein: ${food.protein}")
                             androidx.compose.material3.Text(text = "Carbs: ${food.carbs}")
                             androidx.compose.material3.Text(text = "Fat: ${food.fat}")
                         }
                     }
                 }
+
             }
         }
 
