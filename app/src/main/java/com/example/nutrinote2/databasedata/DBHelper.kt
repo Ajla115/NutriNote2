@@ -5,6 +5,11 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
@@ -22,11 +27,40 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
                 + FOODS_PROTEIN_COL + " INTEGER,"
                 + FOODS_FAT_COL + " INTEGER)")
 
+
+        Log.d("DBHandler", "onCreate method called")
+
         db.execSQL(createTableQuery)
         db.execSQL(createFoodsTableQuery)
-
-        insertFoods()
     }
+
+    @SuppressLint("Range")
+    fun getFoodsByCategory(category: String): List<Food> {
+        val foods = mutableListOf<Food>()
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $FOODS_TABLE_NAME WHERE $FOODS_CATEGORY_COL = ?"
+        val cursor = db.rawQuery(selectQuery, arrayOf(category))
+
+        while (cursor.moveToNext()) {
+            val food = Food(
+                id = cursor.getInt(cursor.getColumnIndex(FOODS_ID_COL)),
+                name = cursor.getString(cursor.getColumnIndex(FOODS_NAME_COL)),
+                category = cursor.getString(cursor.getColumnIndex(FOODS_CATEGORY_COL)),
+                carbs = cursor.getFloat(cursor.getColumnIndex(FOODS_CARBS_COL)),
+                protein = cursor.getFloat(cursor.getColumnIndex(FOODS_PROTEIN_COL)),
+                fat = cursor.getFloat(cursor.getColumnIndex(FOODS_FAT_COL))
+            )
+            foods.add(food)
+        }
+
+        cursor.close()
+        return foods
+    }
+
+
+
+
+
 
     fun insertFoods() {
         val foods = listOf(

@@ -1,5 +1,6 @@
 package com.example.nutrinote2.screens
 
+import android.content.Context
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -27,15 +28,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.nutrinote2.R
 
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
+import com.example.nutrinote2.databasedata.DBHandler
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 
 @Composable
@@ -51,8 +57,14 @@ fun HomeScreen() {
 }
 
 
+
 @Composable
 fun CalorieCounterScreen() {
+
+    val dbHelper = DBHandler(context = LocalContext.current)
+    dbHelper.insertFoods()
+
+
     var consumedCarbs = 245
     var consumedProtein = 35
     var consumedFat = 55
@@ -60,6 +72,7 @@ fun CalorieCounterScreen() {
     var proteinPercentage = 100 * consumedProtein / 50
     var fatPercentage = 100 * consumedFat / 70
     var consumedCalories = 4 * consumedCarbs + 4 * consumedProtein + 9 * consumedFat
+
 
     Column(
         modifier = Modifier
@@ -191,11 +204,20 @@ fun NutritionBar(name: String, percentage: Int, color: Color, modifier: Modifier
     }
 }
 @Composable
-fun MealButton(text: String,
-               imageResId: Int,
-               modifier: Modifier = Modifier) {
+fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
+
+    val dbHelper = DBHandler(context = LocalContext.current)
+
+    var category = text
     var expanded by remember { mutableStateOf(false) }
-    val foods = remember { listOf("Eggs", "Pasta", "Cake") }
+    //val foods = getFoodsByCategory(category)
+
+    val dbHandler = DBHandler(context = LocalContext.current)
+
+// Usage example:
+    val foods = dbHandler.getFoodsByCategory(category)
+
+
     val selectedFood = remember { mutableStateOf("") }
     val buttonColor = Color(0xFFABC7A2)
     val mealButtonColor = Color(0xFFD2EDC8)
@@ -203,7 +225,7 @@ fun MealButton(text: String,
     Column(modifier = modifier) {
         Button(
             onClick = { expanded = true },
-            colors = ButtonDefaults.buttonColors(containerColor = buttonColor, contentColor = Color(0xFF131712)),
+            colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = buttonColor, contentColor = Color(0xFF131712)),
             modifier = modifier
                 .padding(8.dp)
                 .width(170.dp)
@@ -236,26 +258,27 @@ fun MealButton(text: String,
                 .background(color = Color(0xFFABC7A2))
         ) {
             foods.forEach { food ->
-                Button(modifier = modifier
-                    .padding(5.dp)
-                    .width(250.dp)
-                    .height(80.dp),
+                Button(
+                    modifier = modifier
+                        .padding(5.dp)
+                        .fillMaxWidth()
+                        .height(80.dp),
                     onClick = {
-                        selectedFood.value = food
+                        selectedFood.value = food.name
                         expanded = false
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = mealButtonColor, contentColor = Color(0xFF131712)),
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = mealButtonColor, contentColor = Color(0xFF131712)),
                 ) {
                     Row {
                         androidx.compose.material3.Text(
-                            text = food,
-                            style = MaterialTheme.typography.titleLarge,
+                            text = food.name,
+                            style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.align(Alignment.CenterVertically)
                         )
                         Column(modifier = Modifier.padding(start = 50.dp)) {
-                            androidx.compose.material3.Text(text = "protein:")
-                            androidx.compose.material3.Text(text ="carbs:")
-                            androidx.compose.material3.Text(text ="fat:")
+                            androidx.compose.material3.Text(text = "Protein: ${food.protein}")
+                            androidx.compose.material3.Text(text = "Carbs: ${food.carbs}")
+                            androidx.compose.material3.Text(text = "Fat: ${food.fat}")
                         }
                     }
                 }
@@ -272,6 +295,30 @@ fun MealButton(text: String,
     }
 }
 
+
+/*
+fun getFoodsByCategory(category: String): List<Food> {
+    val foods = mutableListOf<Food>()
+    val db = this.readableDatabase
+    val selectQuery = "SELECT * FROM $FOODS_TABLE_NAME WHERE $CATEGORY_COL = ?"
+    val cursor = db.rawQuery(selectQuery, arrayOf(category))
+
+    while (cursor.moveToNext()) {
+        val food = Food(
+            id = cursor.getInt(cursor.getColumnIndex(ID_COL)),
+            name = cursor.getString(cursor.getColumnIndex(NAME_COL)),
+            category = cursor.getString(cursor.getColumnIndex(CATEGORY_COL)),
+            carbs = cursor.getFloat(cursor.getColumnIndex(CARBS_COL)),
+            protein = cursor.getFloat(cursor.getColumnIndex(PROTEIN_COL)),
+            fat = cursor.getFloat(cursor.getColumnIndex(FAT_COL))
+        )
+        foods.add(food)
+    }
+
+    cursor.close()
+    return foods
+}
+*/
 
 @Preview(showBackground = true)
 @Composable
