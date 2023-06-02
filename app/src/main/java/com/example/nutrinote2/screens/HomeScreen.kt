@@ -56,6 +56,9 @@ fun HomeScreen() {
 }
 
 
+var consumedCarbs = 245.0f
+var consumedProtein = 35.0f
+var consumedFat = 55.0f
 
 @Composable
 fun CalorieCounterScreen() {
@@ -85,39 +88,43 @@ fun CalorieCounterScreen() {
     }
 */
 
-    var consumedCarbs = 245
-    var consumedProtein = 35
-    var consumedFat = 55
+
+    consumedCarbs = remember { dbHelper.getDailyConsumptionCarbs(userId) }
+    consumedProtein = remember { dbHelper.getDailyConsumptionProtein(userId) }
+    consumedFat = remember { dbHelper.getDailyConsumptionFat(userId) }
+
     var carbsPercentage = 100 * consumedCarbs / 300
     var proteinPercentage = 100 * consumedProtein / 50
     var fatPercentage = 100 * consumedFat / 70
     var consumedCalories = 4 * consumedCarbs + 4 * consumedProtein + 9 * consumedFat
-
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
+        
+        Text(text = "carbs: $consumedCarbs pro: $consumedProtein fat: $consumedFat")
+        
         // Calorie bar
         CalorieBar(
-            consumedCalories = consumedCalories,
+            consumedCalories = consumedCalories.toInt(),
             totalCalories = 2030,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
         // Nutrition bars
         NutritionBars(
-            carbsPercentage = carbsPercentage,
-            proteinPercentage = proteinPercentage,
-            fatPercentage = fatPercentage,
+            carbsPercentage = carbsPercentage.toInt(),
+            proteinPercentage = proteinPercentage.toInt(),
+            fatPercentage = fatPercentage.toInt(),
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         // Add meal buttons
-        androidx.compose.material3.Text(
+        Text(
             text = "Add Meal",
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(bottom = 8.dp)
@@ -155,7 +162,7 @@ fun CalorieBar(consumedCalories: Int, totalCalories: Int, modifier: Modifier = M
                 .background(primaryColor)
         )
     }
-    androidx.compose.material3.Text(
+    Text(
         text = "Calories: $consumedCalories",
         style = MaterialTheme.typography.titleMedium
     )
@@ -212,11 +219,11 @@ fun NutritionBar(name: String, percentage: Int, color: Color, modifier: Modifier
         Spacer(modifier = Modifier.width(16.dp))
 
         Column {
-            androidx.compose.material3.Text(
+            Text(
                 text = name,
                 style = MaterialTheme.typography.bodyLarge
             )
-            androidx.compose.material3.Text(
+            Text(
                 text = "$percentage%",
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -227,16 +234,18 @@ fun NutritionBar(name: String, percentage: Int, color: Color, modifier: Modifier
 fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
 
     val dbHelper = DBHandler(context = LocalContext.current)
+    val dbHandler = DBHandler(context = LocalContext.current)
 
     var category = text
     var expanded by remember { mutableStateOf(false) }
-
-    val dbHandler = DBHandler(context = LocalContext.current)
-
     val foods = dbHandler.getFoodsByCategory(category)
     val selectedFood = remember { mutableStateOf("") }
     val buttonColor = Color(0xFFABC7A2)
     val mealButtonColor = Color(0xFFD2EDC8)
+    val context = LocalContext.current
+    val db = DBHandler(context)
+    val lastLoginEmail = remember { db.getLastLoginEmail() }
+    var userId = remember { db.getUserIdByEmail(lastLoginEmail) }
 
     Column(modifier = modifier) {
         Button(
@@ -281,6 +290,13 @@ fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
                         .height(80.dp),
                     onClick = {
                         selectedFood.value = food.name
+
+                        var foodId = dbHandler.getFoodIdByName(selectedFood.value)
+                        consumedProtein += dbHelper.getFoodProteinById(foodId)
+                        consumedCarbs += dbHelper.getFoodCarbsById(foodId)
+                        consumedFat += dbHelper.getFoodFatById(foodId)
+                        dbHelper.updateDailyConsumption(userId = userId, consumedProtein, consumedCarbs, consumedFat)
+
                         expanded = false
                     },
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = mealButtonColor, contentColor = Color(0xFF131712)),
@@ -293,7 +309,7 @@ fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
                             modifier = Modifier.weight(1f),
                             verticalArrangement = Arrangement.Center
                         ) {
-                            androidx.compose.material3.Text(
+                            Text(
                                 text = food.name,
                                 style = MaterialTheme.typography.titleMedium,
                                 modifier = Modifier.padding(end = 8.dp)
@@ -303,9 +319,9 @@ fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
                             modifier = Modifier.padding(start = 16.dp),
                             verticalArrangement = Arrangement.Center
                         ) {
-                            androidx.compose.material3.Text(text = "Protein: ${food.protein}")
-                            androidx.compose.material3.Text(text = "Carbs: ${food.carbs}")
-                            androidx.compose.material3.Text(text = "Fat: ${food.fat}")
+                            Text(text = "Protein: ${food.protein}")
+                            Text(text = "Carbs: ${food.carbs}")
+                            Text(text = "Fat: ${food.fat}")
                         }
                     }
                 }
@@ -314,7 +330,7 @@ fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
         }
 
         if (selectedFood.value.isNotEmpty()) {
-            androidx.compose.material3.Text(
+            Text(
                 text = "Selected Food: ${selectedFood.value}",
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(horizontal = 16.dp)

@@ -47,7 +47,13 @@ fun ProfileScreen() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-
+    
+                Text(
+                    text = "Hello $lastLoginEmail!",
+                    style = TextStyle(fontSize = 30.sp, fontWeight = FontWeight.Medium),
+                    modifier = Modifier.padding(16.dp)
+                )
+                
                 Text(
                     text = "History of food intake",
                     style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium),
@@ -66,8 +72,8 @@ fun ProfileScreen() {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp)
-                                .background(Color.LightGray, RoundedCornerShape(8.dp))
+                                .padding(6.dp)
+                                .background(Color(0xFFCBEAC0), RoundedCornerShape(8.dp))
                         ) {
                             Row(
                                 modifier = Modifier

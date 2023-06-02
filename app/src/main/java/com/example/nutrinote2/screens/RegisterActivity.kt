@@ -139,6 +139,10 @@ fun RegisterScreen(onRegisterButtonClicked : () -> Unit) {
                                     "User Added to Database",
                                     Toast.LENGTH_SHORT
                                 ).show()
+
+                                db.insertLoginLog(log_email = email)
+                                db.insertDailyConsumption(userId = db.getUserIdByEmail(email), 0.0f, 0.0f, 0.0f)
+
                                 // Now call the original onClick function
                                 onRegisterButtonClicked()
                             }

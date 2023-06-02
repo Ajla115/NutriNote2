@@ -43,14 +43,169 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
                 + LOGS_EMAIL_COL + " TEXT,"
                 + LOGS_TEST_COL + " INTEGER)")
 
+        val createDailyConsumptionTableQuery = ("CREATE TABLE " + DAILY_CONSUMPTION_TABLE_NAME + " ("
+                + DAILY_CONSUMPTION_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DAILY_CONSUMPTION_USER_ID_COL + " INTEGER, "
+                + DAILY_CONSUMPTION_PROTEIN_COL + " REAL DEFAULT 0, "
+                + DAILY_CONSUMPTION_CARBS_COL + " REAL DEFAULT 0, "
+                + DAILY_CONSUMPTION_FAT_COL + " REAL DEFAULT 0, "
+                + "FOREIGN KEY(" + DAILY_CONSUMPTION_USER_ID_COL + ") REFERENCES " + TABLE_NAME + "(" + ID_COL + ")"
+                + ")")
 
         Log.d("DBHandler", "onCreate method called")
-
 
         db.execSQL(createLogsQuery)
         db.execSQL(createTableQuery)
         db.execSQL(createFoodsTableQuery)
         db.execSQL(createUserFoodsTableQuery)
+        db.execSQL(createDailyConsumptionTableQuery)
+    }
+
+    fun insertDailyConsumption(userId: Int?, protein: Float, carbs: Float, fat: Float) {
+        val db = writableDatabase
+        val values = ContentValues()
+
+        values.put(DAILY_CONSUMPTION_USER_ID_COL, userId)
+        values.put(DAILY_CONSUMPTION_PROTEIN_COL, protein)
+        values.put(DAILY_CONSUMPTION_CARBS_COL, carbs)
+        values.put(DAILY_CONSUMPTION_FAT_COL, fat)
+
+        db.insert(DAILY_CONSUMPTION_TABLE_NAME, null, values)
+        db.close()
+    }
+
+    @SuppressLint("Range")
+    fun getFoodProteinById(foodId: Int?): Float {
+        val db = readableDatabase
+        val selectQuery = "SELECT $FOODS_PROTEIN_COL FROM $FOODS_TABLE_NAME WHERE $FOODS_ID_COL = ?"
+        val selectionArgs = arrayOf(foodId.toString())
+
+        db.rawQuery(selectQuery, selectionArgs)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                return cursor.getFloat(cursor.getColumnIndex(FOODS_PROTEIN_COL))
+            }
+        }
+
+        db.close()
+        return 0.0f
+    }
+
+    @SuppressLint("Range")
+    fun getFoodCarbsById(foodId: Int?): Float {
+        val db = readableDatabase
+        val selectQuery = "SELECT $FOODS_CARBS_COL FROM $FOODS_TABLE_NAME WHERE $FOODS_ID_COL = ?"
+        val selectionArgs = arrayOf(foodId.toString())
+
+        db.rawQuery(selectQuery, selectionArgs)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                return cursor.getFloat(cursor.getColumnIndex(FOODS_CARBS_COL))
+            }
+        }
+
+        db.close()
+        return 0.0f
+    }
+
+    @SuppressLint("Range")
+    fun getFoodFatById(foodId: Int?): Float {
+        val db = readableDatabase
+        val selectQuery = "SELECT $FOODS_FAT_COL FROM $FOODS_TABLE_NAME WHERE $FOODS_ID_COL = ?"
+        val selectionArgs = arrayOf(foodId.toString())
+
+        db.rawQuery(selectQuery, selectionArgs)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                return cursor.getFloat(cursor.getColumnIndex(FOODS_FAT_COL))
+            }
+        }
+
+        db.close()
+        return 0.0f
+    }
+
+
+    fun updateDailyConsumption(userId: Int?, protein: Float, carbs: Float, fat: Float) {
+        val db = writableDatabase
+
+        val values = ContentValues()
+        values.put(DAILY_CONSUMPTION_PROTEIN_COL, protein)
+        values.put(DAILY_CONSUMPTION_CARBS_COL, carbs)
+        values.put(DAILY_CONSUMPTION_FAT_COL, fat)
+
+        val whereClause = "$DAILY_CONSUMPTION_USER_ID_COL = ?"
+        val whereArgs = arrayOf(userId.toString())
+
+        db.update(DAILY_CONSUMPTION_TABLE_NAME, values, whereClause, whereArgs)
+        db.close()
+    }
+
+    @SuppressLint("Range")
+    fun getFoodIdByName(foodName: String): Int? {
+        val db = readableDatabase
+        val selectQuery = "SELECT $FOODS_ID_COL FROM $FOODS_TABLE_NAME WHERE $FOODS_NAME_COL = ?"
+        val selectionArgs = arrayOf(foodName)
+
+        db.rawQuery(selectQuery, selectionArgs)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(cursor.getColumnIndex(FOODS_ID_COL))
+            }
+        }
+
+        db.close()
+        return null
+    }
+
+    @SuppressLint("Range")
+    fun getDailyConsumptionProtein(userId: Int?): Float {
+        val db = readableDatabase
+        var protein: Float = 0f
+
+        val selectQuery = "SELECT $DAILY_CONSUMPTION_PROTEIN_COL FROM $DAILY_CONSUMPTION_TABLE_NAME WHERE $DAILY_CONSUMPTION_USER_ID_COL = ?"
+        val selectionArgs = arrayOf(userId.toString())
+
+        db.rawQuery(selectQuery, selectionArgs)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                protein = cursor.getFloat(cursor.getColumnIndex(DAILY_CONSUMPTION_PROTEIN_COL))
+            }
+        }
+
+        db.close()
+        return protein
+    }
+
+    @SuppressLint("Range")
+    fun getDailyConsumptionCarbs(userId: Int?): Float {
+        val db = readableDatabase
+        var carbs: Float = 0f
+
+        val selectQuery = "SELECT $DAILY_CONSUMPTION_CARBS_COL FROM $DAILY_CONSUMPTION_TABLE_NAME WHERE $DAILY_CONSUMPTION_USER_ID_COL = ?"
+        val selectionArgs = arrayOf(userId.toString())
+
+        db.rawQuery(selectQuery, selectionArgs)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                carbs = cursor.getFloat(cursor.getColumnIndex(DAILY_CONSUMPTION_CARBS_COL))
+            }
+        }
+
+        db.close()
+        return carbs
+    }
+
+    @SuppressLint("Range")
+    fun getDailyConsumptionFat(userId: Int?): Float {
+        val db = readableDatabase
+        var fat: Float = 0f
+
+        val selectQuery = "SELECT $DAILY_CONSUMPTION_FAT_COL FROM $DAILY_CONSUMPTION_TABLE_NAME WHERE $DAILY_CONSUMPTION_USER_ID_COL = ?"
+        val selectionArgs = arrayOf(userId.toString())
+
+        db.rawQuery(selectQuery, selectionArgs)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                fat = cursor.getFloat(cursor.getColumnIndex(DAILY_CONSUMPTION_FAT_COL))
+            }
+        }
+
+        db.close()
+        return fat
     }
 
     @SuppressLint("Range")
@@ -120,9 +275,6 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         return foodAndDates
     }
 
-
-
-
     @SuppressLint("Range")
     fun getUserIdByEmail(email: String): Int? {
         val db = readableDatabase
@@ -153,8 +305,6 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         db.close()
     }
 
-
-
     @SuppressLint("Range")
     fun getFoodsByCategory(category: String): List<Food> {
         val foods = mutableListOf<Food>()
@@ -177,7 +327,6 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         cursor.close()
         return foods
     }
-
 
     fun insertFoods() {
         val foods = listOf(
@@ -299,5 +448,12 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         private const val LOGS_ID_COL = "log_id"
         private const val LOGS_EMAIL_COL = "log_email"
         private const val LOGS_TEST_COL = "log_test"
+
+        private val DAILY_CONSUMPTION_TABLE_NAME = "daily_consumption"
+        private val DAILY_CONSUMPTION_ID_COL = "id"
+        private val DAILY_CONSUMPTION_USER_ID_COL = "user_id"
+        private val DAILY_CONSUMPTION_PROTEIN_COL = "protein"
+        private val DAILY_CONSUMPTION_CARBS_COL = "carbs"
+        private val DAILY_CONSUMPTION_FAT_COL = "fat"
     }
 }
