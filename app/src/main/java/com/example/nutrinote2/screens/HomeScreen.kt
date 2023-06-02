@@ -1,6 +1,6 @@
 package com.example.nutrinote2.screens
 
-import android.content.Context
+
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.example.nutrinote2.R
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,9 +40,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import com.example.nutrinote2.databasedata.DBHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 
@@ -50,7 +48,6 @@ fun HomeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            //.background(colorResource(id = R.color.colorPrimaryDark))
             .wrapContentSize(Alignment.Center)
     ) {
         CalorieCounterScreen()
@@ -63,8 +60,11 @@ fun HomeScreen() {
 fun CalorieCounterScreen() {
 
     val dbHelper = DBHandler(context = LocalContext.current)
-    dbHelper.insertFoods()
+    //dbHelper.insertFoods()
 
+    val context = LocalContext.current
+    val db = DBHandler(context)
+    val lastLoginEmail = remember { db.getLastLoginEmail() }
 
     var consumedCarbs = 245
     var consumedProtein = 35
@@ -80,6 +80,8 @@ fun CalorieCounterScreen() {
             .fillMaxSize()
             .padding(16.dp)
     ) {
+
+        Text(text = lastLoginEmail)
         // Calorie bar
         CalorieBar(
             consumedCalories = consumedCalories,
@@ -307,31 +309,6 @@ fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
         }
     }
 }
-
-
-/*
-fun getFoodsByCategory(category: String): List<Food> {
-    val foods = mutableListOf<Food>()
-    val db = this.readableDatabase
-    val selectQuery = "SELECT * FROM $FOODS_TABLE_NAME WHERE $CATEGORY_COL = ?"
-    val cursor = db.rawQuery(selectQuery, arrayOf(category))
-
-    while (cursor.moveToNext()) {
-        val food = Food(
-            id = cursor.getInt(cursor.getColumnIndex(ID_COL)),
-            name = cursor.getString(cursor.getColumnIndex(NAME_COL)),
-            category = cursor.getString(cursor.getColumnIndex(CATEGORY_COL)),
-            carbs = cursor.getFloat(cursor.getColumnIndex(CARBS_COL)),
-            protein = cursor.getFloat(cursor.getColumnIndex(PROTEIN_COL)),
-            fat = cursor.getFloat(cursor.getColumnIndex(FAT_COL))
-        )
-        foods.add(food)
-    }
-
-    cursor.close()
-    return foods
-}
-*/
 
 @Preview(showBackground = true)
 @Composable

@@ -31,6 +31,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun LoginScreen(onLoginButtonClicked: () -> Unit) {
+
     val context = LocalContext.current
     val db = DBHandler(context)
     var email by remember { mutableStateOf("") }
@@ -108,6 +109,8 @@ fun LoginScreen(onLoginButtonClicked: () -> Unit) {
                         } else {
                             // If the user exists and the password is correct, proceed with the original onClick function
                             withContext(Dispatchers.Main) {
+                                db.insertLoginLog(log_email = email)
+
                                 onLoginButtonClicked()
                             }
                         }

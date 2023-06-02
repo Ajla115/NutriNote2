@@ -27,12 +27,70 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
                 + FOODS_PROTEIN_COL + " INTEGER,"
                 + FOODS_FAT_COL + " INTEGER)")
 
+        val createUserFoodsTableQuery = ("CREATE TABLE " + USER_FOODS_TABLE_NAME + " ("
+                + USER_FOODS_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + USER_FOODS_USER_ID_COL + " INTEGER, "
+                + USER_FOODS_FOOD_ID_COL + " INTEGER, "
+                + USER_FOODS_DATE_COL + " TEXT, "
+                + "FOREIGN KEY(" + USER_FOODS_USER_ID_COL + ") REFERENCES " + TABLE_NAME + "(" + ID_COL + "), "
+                + "FOREIGN KEY(" + USER_FOODS_FOOD_ID_COL + ") REFERENCES " + FOODS_TABLE_NAME + "(" + FOODS_ID_COL + ")"
+                + ")")
+
+        val createLogsQuery = ("CREATE TABLE " + LOGS_TABLE_NAME + " ("
+                + LOGS_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + LOGS_EMAIL_COL + " TEXT,"
+                + LOGS_TEST_COL + " INTEGER)")
+
 
         Log.d("DBHandler", "onCreate method called")
 
+
+        db.execSQL(createLogsQuery)
         db.execSQL(createTableQuery)
         db.execSQL(createFoodsTableQuery)
+        db.execSQL(createUserFoodsTableQuery)
     }
+
+    @SuppressLint("Range")
+    fun getLastLoginEmail(): String {
+        val selectQuery = "SELECT $LOGS_EMAIL_COL FROM $LOGS_TABLE_NAME ORDER BY $LOGS_ID_COL DESC LIMIT 1"
+        val db = this.readableDatabase
+        var lastLoginEmail: String = ""
+
+        db.rawQuery(selectQuery, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                lastLoginEmail = cursor.getString(cursor.getColumnIndex(LOGS_EMAIL_COL))
+            }
+        }
+
+        db.close()
+        return lastLoginEmail
+    }
+
+
+    fun insertLoginLog(log_email: String) {
+        val db = writableDatabase
+        val values = ContentValues()
+
+        values.put(LOGS_EMAIL_COL, log_email)
+        values.put(LOGS_TEST_COL, 1)
+
+        db.insert(LOGS_TABLE_NAME, null, values)
+        db.close()
+    }
+
+    fun insertUserFood(userId: Int, foodId: Int, date: String) {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put(USER_FOODS_USER_ID_COL, userId)
+            put(USER_FOODS_FOOD_ID_COL, foodId)
+            put(USER_FOODS_DATE_COL, date)
+        }
+        db.insert(USER_FOODS_TABLE_NAME, null, values)
+        db.close()
+    }
+
+
 
     @SuppressLint("Range")
     fun getFoodsByCategory(category: String): List<Food> {
@@ -56,10 +114,6 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         cursor.close()
         return foods
     }
-
-
-
-
 
 
     fun insertFoods() {
@@ -171,5 +225,16 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         private const val FOODS_CARBS_COL = "carbs"
         private const val FOODS_PROTEIN_COL = "protein"
         private const val FOODS_FAT_COL = "fat"
+
+        private const val USER_FOODS_TABLE_NAME = "UserFoods"
+        private const val USER_FOODS_ID_COL = "id"
+        private const val USER_FOODS_USER_ID_COL = "userId"
+        private const val USER_FOODS_FOOD_ID_COL = "foodId"
+        private const val USER_FOODS_DATE_COL = "date"
+
+        private const val LOGS_TABLE_NAME = "LoginLogs"
+        private const val LOGS_ID_COL = "log_id"
+        private const val LOGS_EMAIL_COL = "log_email"
+        private const val LOGS_TEST_COL = "log_test"
     }
 }
