@@ -1,6 +1,7 @@
 package com.example.nutrinote2.screens
 
 
+import android.content.ContentValues
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -65,6 +66,24 @@ fun CalorieCounterScreen() {
     val context = LocalContext.current
     val db = DBHandler(context)
     val lastLoginEmail = remember { db.getLastLoginEmail() }
+    var userId = remember { db.getUserIdByEmail(lastLoginEmail) }
+
+
+/*
+    //inserting values in userFoods table
+    val users = listOf(1, 2, 3, 4)
+    val dates = listOf("1.6.2023.", "2.6.2023.", "3.6.2023.", "4.6.2023.", "5.6.2023.", "6.6.2023.", "7.6.2023.", "8.6.2023.", "9.6.2023.")
+    val foodIds = 1..12
+
+    for (user in users) {
+        for (date in dates) {
+            for (foodId in foodIds) {
+
+                dbHelper.insertUserFood(userId = user, foodId = foodId, date = date)
+            }
+        }
+    }
+*/
 
     var consumedCarbs = 245
     var consumedProtein = 35
@@ -80,8 +99,6 @@ fun CalorieCounterScreen() {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-
-        Text(text = lastLoginEmail)
         // Calorie bar
         CalorieBar(
             consumedCalories = consumedCalories,
@@ -213,14 +230,10 @@ fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
 
     var category = text
     var expanded by remember { mutableStateOf(false) }
-    //val foods = getFoodsByCategory(category)
 
     val dbHandler = DBHandler(context = LocalContext.current)
 
-// Usage example:
     val foods = dbHandler.getFoodsByCategory(category)
-
-
     val selectedFood = remember { mutableStateOf("") }
     val buttonColor = Color(0xFFABC7A2)
     val mealButtonColor = Color(0xFFD2EDC8)

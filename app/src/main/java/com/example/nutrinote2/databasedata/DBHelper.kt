@@ -10,6 +10,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Math.random
+import kotlin.random.Random
 
 class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
     override fun onCreate(db: SQLiteDatabase) {
@@ -79,13 +81,74 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         db.close()
     }
 
+    fun isUserFoodsTableEmpty(userId: Int?): Boolean {
+        val countQuery = "SELECT COUNT(*) FROM $USER_FOODS_TABLE_NAME WHERE $USER_FOODS_USER_ID_COL = $userId"
+        val db = this.readableDatabase
+
+        db.rawQuery(countQuery, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val count = cursor.getInt(0)
+                return count == 0
+            }
+        }
+
+        db.close()
+        return true
+    }
+
+    @SuppressLint("Range")
+    fun getFoodAndDatesByUserId(userId: Int?): List<Pair<String, String>> {
+        val db = readableDatabase
+        val foodAndDates = mutableListOf<Pair<String, String>>()
+
+        val selectQuery = "SELECT f.$FOODS_NAME_COL, u.$USER_FOODS_DATE_COL " +
+                "FROM $USER_FOODS_TABLE_NAME u " +
+                "INNER JOIN $FOODS_TABLE_NAME f ON u.$USER_FOODS_FOOD_ID_COL = f.$FOODS_ID_COL " +
+                "WHERE u.$USER_FOODS_USER_ID_COL = ? " +
+                "ORDER BY u.$USER_FOODS_DATE_COL DESC" // Sort by biggest date
+        val selectionArgs = arrayOf(userId.toString())
+
+        db.rawQuery(selectQuery, selectionArgs)?.use { cursor ->
+            while (cursor.moveToNext()) {
+                val foodName = cursor.getString(cursor.getColumnIndex(FOODS_NAME_COL))
+                val date = cursor.getString(cursor.getColumnIndex(USER_FOODS_DATE_COL))
+                foodAndDates.add(foodName to date)
+            }
+        }
+
+        db.close()
+        return foodAndDates
+    }
+
+
+
+
+    @SuppressLint("Range")
+    fun getUserIdByEmail(email: String): Int? {
+        val db = readableDatabase
+        var userId: Int? = null
+
+        val selectQuery = "SELECT $ID_COL FROM $TABLE_NAME WHERE $EMAIL_COL = ?"
+        val selectionArgs = arrayOf(email)
+
+        db.rawQuery(selectQuery, selectionArgs)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                userId = cursor.getInt(cursor.getColumnIndex(ID_COL))
+            }
+        }
+
+        db.close()
+        return userId
+    }
+
     fun insertUserFood(userId: Int, foodId: Int, date: String) {
         val db = writableDatabase
-        val values = ContentValues().apply {
-            put(USER_FOODS_USER_ID_COL, userId)
-            put(USER_FOODS_FOOD_ID_COL, foodId)
-            put(USER_FOODS_DATE_COL, date)
-        }
+        val values = ContentValues()
+
+        values.put(USER_FOODS_USER_ID_COL, userId)
+        values.put(USER_FOODS_FOOD_ID_COL, foodId)
+        values.put(USER_FOODS_DATE_COL, date)
+
         db.insert(USER_FOODS_TABLE_NAME, null, values)
         db.close()
     }
