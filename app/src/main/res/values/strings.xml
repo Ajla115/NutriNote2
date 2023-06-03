@@ -20,5 +20,7 @@
     <string name="recipe9">Tuscan Chicken Pasta</string>
     <string name="recipe10">Crab-Stuffed Avocado</string>
     <string name="info_link">Click here to read more</string>
+    <string name="water_portion">Water portion</string>
+    <string name="total_water">Total Water Intake</string>
 
 </resources>

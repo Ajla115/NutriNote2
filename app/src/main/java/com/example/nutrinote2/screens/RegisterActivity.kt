@@ -39,6 +39,18 @@ fun RegisterScreen(onRegisterButtonClicked : () -> Unit) {
 
     val focusManager = LocalFocusManager.current
 
+
+/*
+    val dbHelper = DBHandler(context = LocalContext.current)
+    dbHelper.insertWaterIntakeEntry("2023-05-23", 500) // Day 1: 500ml
+    dbHelper.insertWaterIntakeEntry("2023-05-24", 1000) // Day 2: 1000ml
+    dbHelper.insertWaterIntakeEntry("2023-05-25", 1250) // Day 3: 1250ml
+    dbHelper.insertWaterIntakeEntry("2023-05-26", 1750) // Day 4: 1750ml
+    dbHelper.insertWaterIntakeEntry("2023-05-27", 1000) // Day 5: 1000ml
+    dbHelper.insertWaterIntakeEntry("2023-05-28", 2000) // Day 6: 2000ml
+    dbHelper.insertWaterIntakeEntry("2023-05-29", 1750) // Day 7: 1750ml
+*/
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center

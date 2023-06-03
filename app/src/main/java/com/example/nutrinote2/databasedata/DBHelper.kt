@@ -52,6 +52,12 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
                 + "FOREIGN KEY(" + DAILY_CONSUMPTION_USER_ID_COL + ") REFERENCES " + TABLE_NAME + "(" + ID_COL + ")"
                 + ")")
 
+        val createWaterIntakeTableQuery = ("CREATE TABLE " + WATER_INTAKE_TABLE_NAME + " ("
+                + WATER_INTAKE_ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + DATE_COL + " TEXT,"
+                + AMOUNT_COL + " INTEGER)")
+        db.execSQL(createWaterIntakeTableQuery)
+
         Log.d("DBHandler", "onCreate method called")
 
         db.execSQL(createLogsQuery)
@@ -59,6 +65,43 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         db.execSQL(createFoodsTableQuery)
         db.execSQL(createUserFoodsTableQuery)
         db.execSQL(createDailyConsumptionTableQuery)
+    }
+
+    fun insertWaterIntakeEntry(date: String, amount: Int) {
+        val values = ContentValues()
+        values.put(AMOUNT_COL, amount)
+        values.put(DATE_COL, date)
+
+        val db = this.writableDatabase
+        db.insert(WATER_INTAKE_TABLE_NAME, null, values)
+        db.close()
+    }
+
+    fun getAllWaterIntakeEntries(): List<WaterIntakeEntry> {
+        val waterIntakeEntries = mutableListOf<WaterIntakeEntry>()
+        val db = this.readableDatabase
+        val selectQuery = "SELECT * FROM $WATER_INTAKE_TABLE_NAME"
+        val cursor = db.rawQuery(selectQuery, null)
+
+        val idIndex = cursor.getColumnIndex(ID_COL)
+        val dateIndex = cursor.getColumnIndex(DATE_COL)
+        val amountIndex = cursor.getColumnIndex(AMOUNT_COL)
+
+        if (idIndex != -1 && dateIndex != -1 && amountIndex != -1) {
+            if (cursor.moveToFirst()) {
+                do {
+                    val entry = WaterIntakeEntry(
+                        id = cursor.getInt(idIndex),
+                        date = cursor.getString(dateIndex),
+                        amount = cursor.getInt(amountIndex)
+                    )
+                    waterIntakeEntries.add(entry)
+                } while (cursor.moveToNext())
+            }
+        }
+
+        cursor.close()
+        return waterIntakeEntries
     }
 
     fun insertDailyConsumption(userId: Int?, protein: Float, carbs: Float, fat: Float) {
@@ -455,5 +498,10 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         private val DAILY_CONSUMPTION_PROTEIN_COL = "protein"
         private val DAILY_CONSUMPTION_CARBS_COL = "carbs"
         private val DAILY_CONSUMPTION_FAT_COL = "fat"
+
+        private const val WATER_INTAKE_TABLE_NAME = "water_intake"
+        private const val WATER_INTAKE_ID_COL = "id"
+        private const val DATE_COL = "date"
+        private const val AMOUNT_COL = "amount"
     }
 }
