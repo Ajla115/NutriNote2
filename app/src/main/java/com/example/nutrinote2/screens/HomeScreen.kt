@@ -1,7 +1,6 @@
 package com.example.nutrinote2.screens
 
 
-import android.content.ContentValues
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +32,8 @@ import com.example.nutrinote2.R
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.Modifier
@@ -41,7 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import com.example.nutrinote2.databasedata.DBHandler
-
+import kotlin.math.absoluteValue
 
 
 @Composable
@@ -71,32 +72,41 @@ fun CalorieCounterScreen() {
     val lastLoginEmail = remember { db.getLastLoginEmail() }
     var userId = remember { db.getUserIdByEmail(lastLoginEmail) }
 
+    var foodAddedTrigger by remember { mutableStateOf(0) }
 
-/*
-    //inserting values in userFoods table
-    val users = listOf(1, 2, 3, 4)
-    val dates = listOf("6.6.2023.", "7.6.2023.", "8.6.2023.")
-    val foodIds = 1..12
 
-    for (user in users) {
-        for (date in dates) {
-            for (foodId in foodIds) {
+    /*
+        //inserting values in userFoods table
+        val users = listOf(1, 2, 3, 4)
+        val dates = listOf("6.6.2023.", "7.6.2023.", "8.6.2023.")
+        val foodIds = 1..12
 
-                dbHelper.insertUserFood(userId = user, foodId = foodId, date = date)
+        for (user in users) {
+            for (date in dates) {
+                for (foodId in foodIds) {
+
+                    dbHelper.insertUserFood(userId = user, foodId = foodId, date = date)
+                }
             }
         }
+    */
+
+    var carbsPercentage = remember { mutableStateOf(0.0f) }
+    var proteinPercentage = remember { mutableStateOf(0.0f) }
+    var fatPercentage = remember { mutableStateOf(0.0f) }
+    var consumedCalories = remember { mutableStateOf(0.0f) }
+
+    LaunchedEffect(foodAddedTrigger) {
+        consumedCarbs = dbHelper.getDailyConsumptionCarbs(userId)
+        consumedProtein = dbHelper.getDailyConsumptionProtein(userId)
+        consumedFat = dbHelper.getDailyConsumptionFat(userId)
+
+        carbsPercentage.value = 100 * consumedCarbs / 300
+        proteinPercentage.value = 100 * consumedProtein / 50
+        fatPercentage.value = 100 * consumedFat / 70
+        consumedCalories.value = 4 * consumedCarbs + 4 * consumedProtein + 9 * consumedFat
     }
-*/
 
-
-    consumedCarbs = remember { dbHelper.getDailyConsumptionCarbs(userId) }
-    consumedProtein = remember { dbHelper.getDailyConsumptionProtein(userId) }
-    consumedFat = remember { dbHelper.getDailyConsumptionFat(userId) }
-
-    var carbsPercentage = 100 * consumedCarbs / 300
-    var proteinPercentage = 100 * consumedProtein / 50
-    var fatPercentage = 100 * consumedFat / 70
-    var consumedCalories = 4 * consumedCarbs + 4 * consumedProtein + 9 * consumedFat
 
     Column(
         modifier = Modifier
@@ -106,16 +116,16 @@ fun CalorieCounterScreen() {
         
         // Calorie bar
         CalorieBar(
-            consumedCalories = consumedCalories.toInt(),
+            consumedCalories = consumedCalories,
             totalCalories = 2030,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
         // Nutrition bars
         NutritionBars(
-            carbsPercentage = carbsPercentage.toInt(),
-            proteinPercentage = proteinPercentage.toInt(),
-            fatPercentage = fatPercentage.toInt(),
+            carbsPercentage = carbsPercentage,
+            proteinPercentage = proteinPercentage,
+            fatPercentage = fatPercentage,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
@@ -129,10 +139,34 @@ fun CalorieCounterScreen() {
         )
 
         Column(Modifier.fillMaxWidth()) {
-            MealButton(text = "Breakfast", imageResId = R.drawable.breakfast)
-            MealButton(text = "Lunch", imageResId = R.drawable.lunch)
-            MealButton(text = "Dinner", imageResId = R.drawable.dinner)
-            MealButton(text = "Snack", imageResId = R.drawable.snack)
+            MealButton(
+                text = "Breakfast",
+                imageResId = R.drawable.breakfast,
+                foodAddedTrigger = foodAddedTrigger,
+                onFoodAdded = {
+                    foodAddedTrigger++
+                })
+            MealButton(
+                text = "Lunch",
+                imageResId = R.drawable.lunch,
+                foodAddedTrigger = foodAddedTrigger,
+                onFoodAdded = {
+                    foodAddedTrigger++
+                })
+            MealButton(
+                text = "Dinner",
+                imageResId = R.drawable.dinner,
+                foodAddedTrigger = foodAddedTrigger,
+                onFoodAdded = {
+                    foodAddedTrigger++
+                })
+            MealButton(
+                text = "Snack",
+                imageResId = R.drawable.snack,
+                foodAddedTrigger = foodAddedTrigger,
+                onFoodAdded = {
+                    foodAddedTrigger++
+                })
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -140,8 +174,8 @@ fun CalorieCounterScreen() {
 }
 
 @Composable
-fun CalorieBar(consumedCalories: Int, totalCalories: Int, modifier: Modifier = Modifier) {
-    val progress = (consumedCalories.toFloat() / totalCalories.toFloat()).coerceIn(0f, 1f)
+fun CalorieBar(consumedCalories: MutableState<Float>, totalCalories: Int, modifier: Modifier = Modifier) {
+    val progress = (consumedCalories.value / totalCalories.toFloat()).coerceIn(0f, 1f)
     val backgroundColor = Color(0xFFD2EDC8)
     val primaryColor = Color(0xFF85A07B)
 
@@ -161,7 +195,7 @@ fun CalorieBar(consumedCalories: Int, totalCalories: Int, modifier: Modifier = M
         )
     }
     Text(
-        text = "Calories: $consumedCalories",
+        text = "Calories: ${consumedCalories.value}",
         style = MaterialTheme.typography.titleMedium
     )
 
@@ -170,9 +204,9 @@ fun CalorieBar(consumedCalories: Int, totalCalories: Int, modifier: Modifier = M
 
 @Composable
 fun NutritionBars(
-    carbsPercentage: Int,
-    proteinPercentage: Int,
-    fatPercentage: Int,
+    carbsPercentage: MutableState<Float>,
+    proteinPercentage: MutableState<Float>,
+    fatPercentage: MutableState<Float>,
     modifier: Modifier = Modifier
 ) {
     val carbsColor = Color(0xFFCBEAC0)
@@ -189,10 +223,10 @@ fun NutritionBars(
 }
 
 @Composable
-fun NutritionBar(name: String, percentage: Int, color: Color, modifier: Modifier = Modifier) {
+fun NutritionBar(name: String, percentage: MutableState<Float>, color: Color, modifier: Modifier = Modifier) {
     val strokeSize = 20.dp
     val startAngle = -90f
-    val sweepAngle = 360f * (percentage / 100f)
+    val sweepAngle = 360f * (percentage.value / 100f)
     val diameter = 85.dp
 
     Column(
@@ -222,14 +256,20 @@ fun NutritionBar(name: String, percentage: Int, color: Color, modifier: Modifier
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
-                text = "$percentage%",
+                text = "${percentage.value}%",
                 style = MaterialTheme.typography.bodyMedium
             )
         }
     }
 }
 @Composable
-fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
+fun MealButton(
+        text: String,
+        imageResId: Int,
+        foodAddedTrigger: Int,
+        onFoodAdded: () -> Unit,
+        modifier: Modifier = Modifier
+    ) {
 
     val dbHelper = DBHandler(context = LocalContext.current)
     val dbHandler = DBHandler(context = LocalContext.current)
@@ -294,10 +334,9 @@ fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
                         consumedCarbs += dbHelper.getFoodCarbsById(foodId)
                         consumedFat += dbHelper.getFoodFatById(foodId)
                         dbHelper.updateDailyConsumption(userId = userId, consumedProtein, consumedCarbs, consumedFat)
-
+                        onFoodAdded()
+                        dbHelper.insertUserFood(userId = userId, foodId = foodId, date = "9.6.2023.")
                         expanded = false
-
-
 
                     },
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = mealButtonColor, contentColor = Color(0xFF131712)),

@@ -293,7 +293,7 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         return userId
     }
 
-    fun insertUserFood(userId: Int, foodId: Int, date: String) {
+    fun insertUserFood(userId: Int?, foodId: Int?, date: String) {
         val db = writableDatabase
         val values = ContentValues()
 
