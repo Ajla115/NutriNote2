@@ -75,7 +75,7 @@ fun CalorieCounterScreen() {
 /*
     //inserting values in userFoods table
     val users = listOf(1, 2, 3, 4)
-    val dates = listOf("1.6.2023.", "2.6.2023.", "3.6.2023.", "4.6.2023.", "5.6.2023.", "6.6.2023.", "7.6.2023.", "8.6.2023.", "9.6.2023.")
+    val dates = listOf("6.6.2023.", "7.6.2023.", "8.6.2023.")
     val foodIds = 1..12
 
     for (user in users) {
@@ -103,8 +103,6 @@ fun CalorieCounterScreen() {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        
-        Text(text = "carbs: $consumedCarbs pro: $consumedProtein fat: $consumedFat")
         
         // Calorie bar
         CalorieBar(
@@ -298,6 +296,9 @@ fun MealButton(text: String, imageResId: Int, modifier: Modifier = Modifier) {
                         dbHelper.updateDailyConsumption(userId = userId, consumedProtein, consumedCarbs, consumedFat)
 
                         expanded = false
+
+
+
                     },
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(containerColor = mealButtonColor, contentColor = Color(0xFF131712)),
                 ) {
