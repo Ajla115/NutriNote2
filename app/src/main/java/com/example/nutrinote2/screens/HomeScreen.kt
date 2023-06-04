@@ -74,7 +74,7 @@ var consumedFat = 55.0f
 fun CalorieCounterScreen() {
 
     val dbHelper = DBHandler(context = LocalContext.current)
-    dbHelper.insertFoods()
+    //dbHelper.insertFoods()
 
     val context = LocalContext.current
     val db = DBHandler(context)

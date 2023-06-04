@@ -100,10 +100,13 @@ private fun rememberWaterIntakeEntries(dbHelper: DBHandler): List<WaterIntakeEnt
 
 @Composable
 private fun calculateTotalWaterIntake(waterIntakeEntries: List<WaterIntakeEntry>): MutableState<Int> {
-    val totalWaterIntake = remember { mutableStateOf(0) }
-    waterIntakeEntries.forEach { entry ->
+    //val totalWaterIntake = remember { mutableStateOf(0) }
+    /*waterIntakeEntries.forEach { entry ->
         totalWaterIntake.value += entry.amount
-    }
+    }*/
+
+    val dbHelper = DBHandler(context = LocalContext.current)
+    var totalWaterIntake = remember { mutableStateOf(dbHelper.getWater()) }
     return totalWaterIntake
 }
 
@@ -166,7 +169,7 @@ private fun WaterIntakeInfo(
                     .size(80.dp)
                     .clip(RoundedCornerShape(50.dp))
                     .background(colorResource(id = R.color.colorPrimary))
-                    .clickable { onDecreaseClicked() },
+                    .clickable { if(waterIntake>0) {onDecreaseClicked()} },
                 contentAlignment = Alignment.Center
 
             ) {
@@ -187,9 +190,9 @@ private fun WaterIntakeInfo(
                     .clip(RoundedCornerShape(50.dp))
                     .background(colorResource(id = R.color.colorPrimaryDark))
                     .clickable {
-                        if (waterIntake < 3000) {
+                        //if (waterIntake < 3000) {
                             onIncreaseClicked()
-                        }
+                        //}
                     },
                 contentAlignment = Alignment.Center
             ) {
