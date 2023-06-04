@@ -67,6 +67,22 @@ class DBHandler(context: Context?) : SQLiteOpenHelper(context, DB_NAME, null, DB
         db.execSQL(createDailyConsumptionTableQuery)
     }
 
+    @SuppressLint("Range")
+    fun getWater(): Int {
+        val selectQuery = "SELECT $AMOUNT_COL FROM $WATER_INTAKE_TABLE_NAME ORDER BY $WATER_INTAKE_ID_COL DESC LIMIT 1"
+        val db = this.readableDatabase
+        var lastWater: Int = 0
+
+        db.rawQuery(selectQuery, null)?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                lastWater = cursor.getInt(cursor.getColumnIndex(AMOUNT_COL))
+            }
+        }
+
+        db.close()
+        return lastWater
+    }
+
     fun insertWaterIntakeEntry(date: String, amount: Int) {
         val values = ContentValues()
         values.put(AMOUNT_COL, amount)
