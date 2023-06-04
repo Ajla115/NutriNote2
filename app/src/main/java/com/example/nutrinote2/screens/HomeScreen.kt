@@ -40,19 +40,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import com.example.nutrinote2.databasedata.DBHandler
 import kotlin.math.absoluteValue
 
 
 @Composable
 fun HomeScreen() {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .wrapContentSize(Alignment.Center)
-    ) {
-        CalorieCounterScreen()
+            .background(colorResource(id = R.color.white))
+                )
+            {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .wrapContentSize(Alignment.Center)
+        ) {
+            CalorieCounterScreen()
+        }
     }
 }
 
@@ -65,7 +74,7 @@ var consumedFat = 55.0f
 fun CalorieCounterScreen() {
 
     val dbHelper = DBHandler(context = LocalContext.current)
-    //dbHelper.insertFoods()
+    dbHelper.insertFoods()
 
     val context = LocalContext.current
     val db = DBHandler(context)
@@ -278,7 +287,7 @@ fun MealButton(
     var expanded by remember { mutableStateOf(false) }
     val foods = dbHandler.getFoodsByCategory(category)
     val selectedFood = remember { mutableStateOf("") }
-    val buttonColor = Color(0xFFABC7A2)
+    val buttonColor = colorResource(id = R.color.colorPrimaryDark)
     val mealButtonColor = Color(0xFFD2EDC8)
     val context = LocalContext.current
     val db = DBHandler(context)

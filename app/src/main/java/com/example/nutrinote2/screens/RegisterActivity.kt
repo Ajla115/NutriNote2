@@ -1,24 +1,30 @@
 package com.example.nutrinote2.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import com.example.nutrinote2.ui.theme.Shapes
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.nutrinote2.R
 import com.example.nutrinote2.databasedata.DBHandler
 
 import com.example.nutrinote2.databasedata.User
@@ -40,16 +46,15 @@ fun RegisterScreen(onRegisterButtonClicked : () -> Unit) {
     val focusManager = LocalFocusManager.current
 
 
-/*
-    val dbHelper = DBHandler(context = LocalContext.current)
+
+    /*val dbHelper = DBHandler(context = LocalContext.current)
     dbHelper.insertWaterIntakeEntry("2023-05-23", 500) // Day 1: 500ml
     dbHelper.insertWaterIntakeEntry("2023-05-24", 1000) // Day 2: 1000ml
     dbHelper.insertWaterIntakeEntry("2023-05-25", 1250) // Day 3: 1250ml
     dbHelper.insertWaterIntakeEntry("2023-05-26", 1750) // Day 4: 1750ml
     dbHelper.insertWaterIntakeEntry("2023-05-27", 1000) // Day 5: 1000ml
     dbHelper.insertWaterIntakeEntry("2023-05-28", 2000) // Day 6: 2000ml
-    dbHelper.insertWaterIntakeEntry("2023-05-29", 1750) // Day 7: 1750ml
-*/
+    dbHelper.insertWaterIntakeEntry("2023-05-29", 1750) // Day 7: 1750ml*/
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -66,13 +71,13 @@ fun RegisterScreen(onRegisterButtonClicked : () -> Unit) {
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "Sign up to create an account,",
+                text = "Track your nutrient intake effortlessly with our app.",
                 fontWeight = FontWeight.Bold,
                 fontSize = 26.sp,
                 color = Color.DarkGray
             )
 
-            Spacer(modifier = Modifier.height(128.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             OutlinedTextField(
                 value = username,
@@ -161,16 +166,30 @@ fun RegisterScreen(onRegisterButtonClicked : () -> Unit) {
                         }
                     }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(50.dp)),
                 contentPadding = PaddingValues(vertical = 16.dp, horizontal = 1.dp),
                 shape = Shapes.large,
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF99EDC3)
+                    backgroundColor = colorResource(id = R.color.colorAccentDark)
                 )
             ) {
-                Text("Register", fontSize = 15.sp)
+                Text("Register", fontSize = 15.sp, color= Color.White)
             }
             Spacer(modifier = Modifier.height(64.dp))
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .align(Alignment.BottomCenter)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.groceries),
+                contentDescription = "Your Drawable",
+                modifier = Modifier.fillMaxSize()
+            )
         }
     }
 }

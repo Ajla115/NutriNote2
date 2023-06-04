@@ -1,17 +1,22 @@
 package com.example.nutrinote2.screens
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -19,6 +24,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.nutrinote2.R
 import com.example.nutrinote2.databasedata.DBHandler
 import com.example.nutrinote2.databasedata.User
 import com.example.nutrinote2.databasedata.UserViewModel
@@ -51,13 +57,13 @@ fun LoginScreen(onLoginButtonClicked: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "Sign in to continue,",
+                text = "NutriNote is here to help you make every bite count!",
                 fontWeight = FontWeight.Bold,
                 fontSize = 26.sp,
                 color = Color.DarkGray
             )
 
-            Spacer(modifier = Modifier.height(128.dp))
+            Spacer(modifier = Modifier.height(60.dp))
 
             OutlinedTextField(
                 value = email,
@@ -116,17 +122,32 @@ fun LoginScreen(onLoginButtonClicked: () -> Unit) {
                         }
                     }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(50.dp)),
                 contentPadding = PaddingValues(vertical = 16.dp, horizontal = 1.dp),
                 shape = Shapes.large,
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF99EDC3)
+                    backgroundColor = colorResource(id = R.color.colorAccentDark)
                 )
             ) {
-                Text("Login", fontSize = 15.sp)
+                Text("Login", fontSize = 15.sp, color= Color.White)
             }
             Spacer(modifier = Modifier.height(128.dp))
         }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(200.dp)
+                .align(Alignment.BottomCenter)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.groceries),
+                contentDescription = "Your Drawable",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+
     }
 }
 

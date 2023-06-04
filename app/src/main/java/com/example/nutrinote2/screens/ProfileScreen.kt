@@ -37,9 +37,13 @@ fun ProfileScreen() {
     val isIt = remember { db.isUserFoodsTableEmpty(userId) }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
         verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
+        horizontalAlignment = Alignment.Start,
+
+
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),

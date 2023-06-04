@@ -123,8 +123,8 @@ fun TopBar(navController: NavController, currentRoute: String?) {
 
     TopAppBar(
         title = { Text(text = title, fontSize = 18.sp) },
-        backgroundColor = colorResource(id = R.color.colorPrimary),
-        contentColor = Color.White
+        backgroundColor = colorResource(id = R.color.colorAccentDark),
+        contentColor = colorResource(id = R.color.white)
     )
 }
 
@@ -161,7 +161,7 @@ fun BottomNavigationBar(navController: NavController) {
     )
 
     BottomNavigation(
-        backgroundColor = colorResource(id = R.color.colorPrimary),
+        backgroundColor = colorResource(id = R.color.colorAccentDark),
         contentColor = Color.White
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()

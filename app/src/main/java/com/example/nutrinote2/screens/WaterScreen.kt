@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -11,6 +12,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -124,11 +126,11 @@ fun WaterScreenScreen(
                 .fillMaxWidth(),
         ) {
             Image(
-                painter = painterResource(R.drawable.watercup),
+                painter = painterResource(R.drawable.waterglass),
                 contentDescription = null,
                 modifier = Modifier
-                    .width(250.dp)
-                    .height(250.dp)
+                    .width(280.dp)
+                    .height(280.dp)
                     .align(Alignment.Center)
                     .offset(x = (5).dp, y = (50).dp),
                 contentScale = ContentScale.Fit,
@@ -162,6 +164,7 @@ private fun WaterIntakeInfo(
                 modifier = Modifier
                     .padding(8.dp)
                     .size(80.dp)
+                    .clip(RoundedCornerShape(50.dp))
                     .background(colorResource(id = R.color.colorPrimary))
                     .clickable { onDecreaseClicked() },
                 contentAlignment = Alignment.Center
@@ -181,6 +184,7 @@ private fun WaterIntakeInfo(
                 modifier = Modifier
                     .padding(8.dp)
                     .size(80.dp)
+                    .clip(RoundedCornerShape(50.dp))
                     .background(colorResource(id = R.color.colorPrimaryDark))
                     .clickable {
                         if (waterIntake < 3000) {
