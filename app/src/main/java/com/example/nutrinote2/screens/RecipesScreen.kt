@@ -126,28 +126,3 @@ fun RecipeInformation(
     }
 }
 
-//Deafult verzija
-/*@Composable
-fun RecipesScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.White)
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Movies View",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 25.sp
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun RecipesScreenPreview() {
-    RecipesScreen()
-}*/

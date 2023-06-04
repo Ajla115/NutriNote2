@@ -2,7 +2,7 @@ package com.example.nutrinote2
 
 sealed class NavigationItem(var route: String, var icon: Int, var title: String) {
     object Home : NavigationItem("home", R.drawable.ic_home, "Home")
-    object Water : NavigationItem("water", R.drawable.ic_music, "Water")
+    object Water : NavigationItem("water", R.drawable.ic_water_foreground, "Water")
     object Recipes : NavigationItem("recipes", R.drawable.ic_book, "Recipes")
     object Profile : NavigationItem("profile", R.drawable.ic_profile, "Profile")
     }

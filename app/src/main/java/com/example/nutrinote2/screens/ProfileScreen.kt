@@ -15,7 +15,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -60,7 +64,11 @@ fun ProfileScreen() {
                 
                 Text(
                     text = "History of food intake",
-                    style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium),
+                    style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Medium,
+
+                    ),
                     modifier = Modifier.padding(16.dp)
                 )
 
@@ -77,7 +85,7 @@ fun ProfileScreen() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(6.dp)
-                                .background(Color(0xFFCBEAC0), RoundedCornerShape(8.dp))
+                                .background(Color(0xFFB7E4C7), RoundedCornerShape(8.dp))
                         ) {
                             Row(
                                 modifier = Modifier
@@ -92,7 +100,7 @@ fun ProfileScreen() {
                                 )
                                 Text(
                                     text = "Date: $date",
-                                    style = TextStyle(fontStyle = FontStyle.Italic)
+                                    style = TextStyle(fontStyle = FontStyle.Normal)
                                 )
                             }
                         }
@@ -109,38 +117,3 @@ fun ProfileScreen() {
 
 
 
-
-
-
-
-
-
-
-
-/*@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-
-    ProfileScreen(onLogoutButtonClicked = {})
-}*/
-
-
-
-/*fun ProfileScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            //.background(colorResource(id = R.color.colorPrimaryDark))
-            .wrapContentSize(Alignment.Center)
-    ) {
-        Text(
-            text = "Profile View",
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            textAlign = TextAlign.Center,
-            fontSize = 25.sp
-        )
-    }
-}
-*/

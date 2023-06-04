@@ -209,7 +209,7 @@ private fun WaterIntakeInfo(
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = colorResource(id = R.color.colorPrimaryDark)
+                color = colorResource(id = R.color.colorAccentDark)
             ),
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -222,7 +222,7 @@ private fun WaterIntakeInfo(
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = colorResource(id = R.color.colorPrimaryDark)
+                color = colorResource(id = R.color.colorAccentDark)
             ),
             textAlign = TextAlign.Left,
             modifier = Modifier.fillMaxWidth()
@@ -233,7 +233,7 @@ private fun WaterIntakeInfo(
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color=  colorResource(id = R.color.colorPrimaryDark)
+                color=  colorResource(id = R.color.colorAccentDark)
 
             ),
             modifier = Modifier

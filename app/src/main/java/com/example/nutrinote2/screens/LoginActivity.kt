@@ -23,11 +23,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nutrinote2.R
 import com.example.nutrinote2.databasedata.DBHandler
-import com.example.nutrinote2.databasedata.User
-import com.example.nutrinote2.databasedata.UserViewModel
 import com.example.nutrinote2.ui.theme.Shapes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -150,92 +147,3 @@ fun LoginScreen(onLoginButtonClicked: () -> Unit) {
 
     }
 }
-
-
-/*
-@Composable
-fun LoginScreen(onLoginButtonClicked : () -> Unit) {
-    val viewModel: UserViewModel = viewModel()
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-
-            Text(text = "Welcome,", fontWeight = FontWeight.Bold, fontSize = 32.sp, color = Color(0xFF1B7F79))
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(text = "Sign in to continue,", fontWeight = FontWeight.Bold, fontSize = 26.sp, color = Color.DarkGray)
-
-            Spacer(modifier = Modifier.height(128.dp))
-
-            var email by remember { mutableStateOf("") }
-            val focusManager = LocalFocusManager.current //dodano
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text(text = "Email:") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy( //dodano
-                    keyboardType = KeyboardType.Email, //dodano
-                    imeAction = ImeAction.Next //da prebaci na sljedecu liniju //dodano
-                ),
-                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus((FocusDirection.Down)) }) //dodano
-                //dodano
-                //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-            )
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            var password by remember { mutableStateOf("") }
-
-
-            OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text(text = "Password:") },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy( //dodano
-                    keyboardType = KeyboardType.Password, //dodano
-                    imeAction = ImeAction.Done  //dodano
-                ),
-                keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }), //dodano
-                visualTransformation = PasswordVisualTransformation()//dodano
-                //ja sam sklanjala zareze sa zadnjeg elementa u redoslijedu, iako nije bio problem ako je on bio tu, ali sta znam, za svaki slucaj
-                //keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
-            )
-
-            Spacer(modifier = Modifier.height(64.dp))
-
-            Button(
-                onClick = /*{
-                    if (email.isNotEmpty() && password.isNotEmpty()) {
-                        val user = User(username = email, email = email, password = password)
-                        viewModel.onUserInputChanged(user)*/
-                        onLoginButtonClicked,
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(vertical = 16.dp, horizontal = 1.dp),
-                shape = Shapes.large,
-                colors = ButtonDefaults.buttonColors(
-                    backgroundColor = Color(0xFF99EDC3)
-                )) {
-                Text("Login", fontSize = 15.sp)
-            }
-
-            Spacer(modifier = Modifier.height(128.dp))
-
-        }
-    }
-}
-*/
-
-
-
-/*@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-
-    LoginScreen(onLoginButtonClicked = {})
-}*/

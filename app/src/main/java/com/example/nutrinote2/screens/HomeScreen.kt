@@ -287,7 +287,7 @@ fun MealButton(
     var expanded by remember { mutableStateOf(false) }
     val foods = dbHandler.getFoodsByCategory(category)
     val selectedFood = remember { mutableStateOf("") }
-    val buttonColor = colorResource(id = R.color.colorPrimaryDark)
+    val buttonColor = colorResource(id = R.color.colorPrimary)
     val mealButtonColor = Color(0xFFD2EDC8)
     val context = LocalContext.current
     val db = DBHandler(context)
@@ -344,7 +344,7 @@ fun MealButton(
                         consumedFat += dbHelper.getFoodFatById(foodId)
                         dbHelper.updateDailyConsumption(userId = userId, consumedProtein, consumedCarbs, consumedFat)
                         onFoodAdded()
-                        dbHelper.insertUserFood(userId = userId, foodId = foodId, date = "9.6.2023.")
+                        dbHelper.insertUserFood(userId = userId, foodId = foodId, date = "4.6.2023.")
                         expanded = false
 
                     },
