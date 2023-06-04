@@ -344,7 +344,7 @@ fun MealButton(
                         consumedFat += dbHelper.getFoodFatById(foodId)
                         dbHelper.updateDailyConsumption(userId = userId, consumedProtein, consumedCarbs, consumedFat)
                         onFoodAdded()
-                        dbHelper.insertUserFood(userId = userId, foodId = foodId, date = "4.6.2023.")
+                        dbHelper.insertUserFood(userId = userId, foodId = foodId, date = "9.6.2023.")
                         expanded = false
 
                     },
